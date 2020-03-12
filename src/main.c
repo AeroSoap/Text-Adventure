@@ -5,27 +5,26 @@ Player* player;
 Location* startLoc;
 
 int main() {
-	int i;
-	Location** near;
-	startLoc = initLocation("Base", 5);
+	startLoc = initLocation("Home", 3);
+	startLoc->near[0] = initLocation("Store", 1);
+	startLoc->near[1] = initLocation("School", 2);
+	startLoc->near[2] = initLocation("Hell", 2);
+	startLoc->near[0]->near[0] = startLoc;
+	startLoc->near[1]->near[0] = startLoc;
+	startLoc->near[1]->near[1] = startLoc->near[2];
+	startLoc->near[2]->near[0] = startLoc;
+	startLoc->near[2]->near[1] = startLoc->near[1];
 	player = initPlayer(startLoc);
-	near = &(startLoc->near);
-	*near = initLocation("Zero", 1);
-	*(near + 1) = initLocation("One", 1);
 	printf("Start near: %i\n", startLoc->nearCount);
 	printf("Health: %i\n", player->combatant->health);
 	printf("Location: %s\n", player->location->name);
 	printf("Valid: %i\n", player->location->isValid);
-	printf("Nearby locations(%i max)\n", player->location->nearCount);
-	for(i = 0; i < player->location->nearCount; i++) {
-		if(player->location->near[i].isValid) {
-			printf("\t%s\n", player->location->near[i].name);
-		} else {
-			printf("%i\n", i);
-		}
-	}
-	printf("Done!");
-	free(player);
-	free(startLoc);
+	printNear(player->location);
+	printNear(player->location->near[0]);
+	printNear(player->location->near[1]);
+	printNear(player->location->near[2]);
+	printf("Done!\n");
+	freePlayer(player);
+	printf("Freedom attained\n");
 	return 0;
 }
