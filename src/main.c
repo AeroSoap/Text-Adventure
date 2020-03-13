@@ -1,29 +1,31 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "player.c"
+#include "commandHandler.c"
 
 Player* player;
 Location* startLoc;
 
 int main() {
-	startLoc = initLocation("Home", 3);
-	startLoc->near[0] = initLocation("Store", 1);
-	startLoc->near[1] = initLocation("School", 2);
-	startLoc->near[2] = initLocation("Hell", 2);
+	char input[64];
+	startLoc = initLocation("Den", 3);
+	startLoc->near[0] = initLocation("Office", 1);
+	startLoc->near[1] = initLocation("Kitchen", 2);
+	startLoc->near[2] = initLocation("My Room", 2);
 	startLoc->near[0]->near[0] = startLoc;
 	startLoc->near[1]->near[0] = startLoc;
 	startLoc->near[1]->near[1] = startLoc->near[2];
 	startLoc->near[2]->near[0] = startLoc;
 	startLoc->near[2]->near[1] = startLoc->near[1];
 	player = initPlayer(startLoc);
-	printf("Start near: %i\n", startLoc->nearCount);
-	printf("Health: %i\n", player->combatant->health);
-	printf("Location: %s\n", player->location->name);
-	printf("Valid: %i\n", player->location->isValid);
-	printNear(player->location);
-	printNear(player->location->near[0]);
-	printNear(player->location->near[1]);
-	printNear(player->location->near[2]);
+	setPlayer(player);
+	do {
+		gets(input);
+		handleCommand(input);
+	} while (!player->hasEnded);
 	printf("Done!\n");
+	/* It is not necessary to free locations from other structs containing pointers to them because they are all freed here */
+	freeLocation(startLoc);
 	freePlayer(player);
 	printf("Freedom attained\n");
 	return 0;

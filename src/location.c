@@ -12,7 +12,7 @@ typedef struct Location {
 /* Prints out the location given and the locations near that location */
 void printNear(Location* l) {
 	int i;
-	printf("Nearby locations to %s:\n", l->name, l->nearCount);
+	printf("Nearby locations to %s:\n", l->name);
 	for(i = 0; i < l->nearCount; i++) {
 		if(l->near[i]->isValid) {
 			printf("\t%s\n", l->near[i]->name);
@@ -20,11 +20,27 @@ void printNear(Location* l) {
 	}
 }
 
+/* Helper function that grabs all the locations reachable from the given location */
+void getLocations(Location* l, Location** locs, int* amt) {
+	int i;
+	/* Mark the location as invalid so it's not visited again */
+	l->isValid = 0;
+	/* Go through all near locations and recursively repeat the search */
+	for(i = 0; i < l->nearCount; i++) {
+		if(l->near[i]->isValid) {
+			getLocations(l->near[i], locs, amt);
+		}
+	}
+	/* Add the location to the array of locations to be deleted */
+	locs[*amt] = l;
+	(*amt)++;
+}
+
 /* Unlike other free functions, this will free all locations reachable by the given location as well */
 void freeLocation(Location* l) {
 	/* Make sure the array can hold the maximum amount of locations if needed */
 	Location** locs = malloc(locationCount * sizeof(Location*));
-	
+
 	int amt = 0;
 	int i;
 	/* Grab and delete all necessary locations */
@@ -37,25 +53,7 @@ void freeLocation(Location* l) {
 	locationCount -= amt;
 }
 
-/* Helper function that grabs all the locations reachable from the given location */
-void getLocations(Location* l, Location** locs, int* amt) {
-	/* Mark the location as invalid so it's not visited again */
-	l->isValid = 0;
-
-	int i;
-	/* Go through all near locations and recursively repeat the search */
-	for(i = 0; i < l->nearCount; i++) {
-		if(l->near[i]->isValid) {
-			getLocations(l->near[i], locs, amt);
-		}
-	}
-	/* Add the location to the array of locations to be deleted */
-	locs[*amt] = l;
-	(*amt)++;
-}
-
 Location* initLocation(char* name, int nearCount) {
-	int i;
 	/* Give us space for the new location */
 	Location* l = malloc(sizeof(Location));
 
