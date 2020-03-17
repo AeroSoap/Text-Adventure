@@ -8,25 +8,22 @@ Location* startLoc;
 
 int main() {
 	char input[64];
-	startLoc = initLocation("Den", 3);
-	startLoc->near[0] = initLocation("Office", 1);
-	startLoc->near[1] = initLocation("Kitchen", 2);
-	startLoc->near[2] = initLocation("My Room", 2);
-	startLoc->near[0]->near[0] = startLoc;
-	startLoc->near[1]->near[0] = startLoc;
-	startLoc->near[1]->near[1] = startLoc->near[2];
-	startLoc->near[2]->near[0] = startLoc;
-	startLoc->near[2]->near[1] = startLoc->near[1];
+	printf("You find yourself at the entrance of an immense, non-euclidian castle fractured in time and space.\n");
+	printf("You hear lightning strike somewhere behind the castle, but not even the faintest glow is visible.\n");
+	printf("For reasons baffling to philosophers and psychologists alike, you push open the doors and walk inside.\n");
+	grabLocationData();
+	startLoc = initLocation("Entrance", 2);
+	fillLocation(startLoc);
 	player = initPlayer(startLoc);
 	setPlayer(player);
 	do {
 		gets(input);
 		handleCommand(input);
 	} while (!player->hasEnded);
-	printf("Done!\n");
 	/* It is not necessary to free locations from other structs containing pointers to them because they are all freed here */
 	freeLocation(startLoc);
 	freePlayer(player);
-	printf("Freedom attained\n");
+	free(names);
+	printf("Thanks for playing!\n");
 	return 0;
 }

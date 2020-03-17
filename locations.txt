@@ -1,0 +1,9 @@
+Dining Hall
+Kitchen
+Hallway
+Bedroom
+Library
+Armory
+Treasure Vault
+Restroom
+Garden
