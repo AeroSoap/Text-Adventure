@@ -1,6 +1,4 @@
 Planned or Implemented Features (Preliminary)
 - Node-based travel
+- Procedurally generated environment, item placement
 - Inventory
-- Procedurally generated items, environment, enemies
-- Combat system
-- Final boss (win condition)

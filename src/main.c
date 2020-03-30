@@ -16,6 +16,8 @@ int main() {
 	fillLocation(startLoc);
 	player = initPlayer(startLoc);
 	setPlayer(player);
+	addItem(initItem("Yar"), player->inventory);
+	addItem(initItem("Har"), player->inventory);
 	do {
 		gets(input);
 		handleCommand(input);

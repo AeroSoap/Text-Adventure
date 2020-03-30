@@ -1,4 +1,4 @@
-#define CMD_AMT 4
+#define CMD_AMT 5
 
 Player* player;
 
@@ -20,6 +20,41 @@ int lengthOf(char* str) {
 	while(str[i++]);
 	/* Go back one for the proper length */
 	return i - 1;
+}
+
+void inventory(char* args) {
+	/* To get help on the command */
+	if(strEquals(args, "GET_INFO")) {
+		printf("Syntax: inventory\n");
+		printf("Lists all collected items.\n");
+		return;
+	}
+	/* Error handling */
+	if(lengthOf(args)) {
+		printf("Command \"inventory\" does not accept arguments.\n");
+		return;
+	}
+	/* Use proper grammer... */
+	/* Print case for one item */
+	if(!player->inventory->item->hasNext) {
+		printf("Item collected: %s.\n", player->inventory->item->name);
+	} else {
+		/* Any more than one starts with this */
+		printf("Items collected: ");
+		/* Print case for two items */
+		if(!player->inventory->item->next->hasNext) {
+			printf("%s and %s.\n", player->inventory->item->name, player->inventory->item->next->name);
+		} else {
+			/* Print case for three or more items */
+			Item* cur = player->inventory->item;
+			while(cur->hasNext) {
+				printf("%s, ", cur->name);
+				cur = cur->next;
+			}
+			printf("and %s.\n", cur->name);
+		}
+	}
+
 }
 
 void quit(char* args) {
@@ -169,6 +204,7 @@ void setPlayer(Player* p) {
 	addCommand(look, "look", i++);
 	addCommand(quit, "quit", i++);
 	addCommand(help, "help", i++);
+	addCommand(inventory, "inventory", i++);
 }
 
 /* Returns the index of the first occurence of the given character, starting at the min value.
